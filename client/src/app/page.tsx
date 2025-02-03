@@ -1,0 +1,125 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import ToggleButton from './components/ToggleButton';
+import TableLengthSelector from './components/TableLengthSelector';
+import FixturesTable from './components/FixturesTable';
+import { calculateUpdatedFixtures } from './utils/utils';
+
+type Fixture = {
+  gameweek: number;
+  home_away: string;
+  opponent: string;
+  opponent_short: string;
+  xG: number;
+  xGA: number;
+};
+
+interface UpdatedFixtures {
+  [team: string]: {
+    fixtures: Fixture;
+    total_opponent_xG_next_n_gws: number;
+    total_opponent_xGA_next_n_gws: number;
+  }
+}
+
+type Fixtures = Record<string, Fixture[]>; 
+
+const HomePage = () => {
+  const [fixtures, setFixtures] = useState<any[]>([]); // State to store the fixtures data
+  const [loading, setLoading] = useState(true); // State for the loading status
+  const [error, setError] = useState(''); // State for error messages
+  const [isAttack, setIsAttack] = useState(true);
+  const [tableLength, setTableLength] = useState(0);
+  const [gwArray, setGwArray] = useState<number[]>([]);
+  const [minGw, setMinGw] = useState(0)
+  const [maxGw, setMaxGw] = useState(0)
+  
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/fixtures') // Update the endpoint if needed
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setFixtures(data); // Assuming `data` contains the fixtures
+        setLoading(false);
+        // use fixtures object to determine maximum table length 
+        // also creates an array of upcoming gw numbers to refer to when creating the table columns
+        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [team, teamFixtures]) => {
+          const gwCount = teamFixtures.length; // Get number of fixtures for this team
+          
+          // If this team has more fixtures than the previous max, update acc
+          if (gwCount > acc.length_of_table) {
+            acc.length_of_table = gwCount;
+            acc.gw_array = teamFixtures.map((fixture: Fixture) => fixture.gameweek); // Extract the gameweek numbers
+          }
+          return acc;
+        }, { length_of_table: 0, gw_array: [] }); // Initialize the accumulator with default values
+        setMinGw(Math.min(...gw_array))
+        setMaxGw(Math.max(...gw_array))
+        setTableLength(length_of_table)
+        setGwArray(gw_array)
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="text-center text-lg">Loading fixtures...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
+
+
+  const updatedFixtures = calculateUpdatedFixtures(fixtures, minGw, maxGw)
+
+  console.log(updatedFixtures)
+
+  console.log(minGw, maxGw)
+
+  // Need to send the isAttack state to the FixturesTable so it can sort by xG or xGA 
+  // depending which state its in
+
+  // Need to first update Fixtures Table so it takes updatedFxitures as a prop, 
+  // rather than just fixtures
+
+  // JSX for displaying the fixtures
+  return (
+    <div className="container mx-auto p-4 overflow-auto relative">
+      <div className="flex items-center justify-between max-w-lg mx-auto mb-6">
+        <TableLengthSelector 
+          minGw={minGw} 
+          maxGw={maxGw} 
+          gwArray={gwArray} 
+          setMinGw={setMinGw} 
+          setMaxGw={setMaxGw}
+        />
+        <h1 className="text-2xl font-bold">FPL Fixture Difficulty</h1>
+        <ToggleButton 
+          isAttack={isAttack} 
+          setIsAttack={setIsAttack}
+        />
+      </div>
+      <div className="overflow-x-auto">
+        <FixturesTable 
+          updatedFixtures={updatedFixtures} 
+          gw_array={gwArray} 
+          minGw={minGw} 
+          maxGw={maxGw}
+          isAttack={isAttack}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
+
