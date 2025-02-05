@@ -26,11 +26,10 @@ interface UpdatedFixtures {
 type Fixtures = Record<string, Fixture[]>; 
 
 const HomePage = () => {
-  const [fixtures, setFixtures] = useState<any[]>([]); // State to store the fixtures data
+  const [fixtures, setFixtures] = useState<Fixtures>({}); // State to store the fixtures data
   const [loading, setLoading] = useState(true); // State for the loading status
   const [error, setError] = useState(''); // State for error messages
   const [isAttack, setIsAttack] = useState(true);
-  const [tableLength, setTableLength] = useState(0);
   const [gwArray, setGwArray] = useState<number[]>([]);
   const [minGw, setMinGw] = useState(0)
   const [maxGw, setMaxGw] = useState(0)
@@ -49,7 +48,7 @@ const HomePage = () => {
         setLoading(false);
         // use fixtures object to determine maximum table length 
         // also creates an array of upcoming gw numbers to refer to when creating the table columns
-        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [team, teamFixtures]) => {
+        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [_, teamFixtures]) => {
           const gwCount = teamFixtures.length; // Get number of fixtures for this team
           
           // If this team has more fixtures than the previous max, update acc
@@ -61,7 +60,6 @@ const HomePage = () => {
         }, { length_of_table: 0, gw_array: [] }); // Initialize the accumulator with default values
         setMinGw(Math.min(...gw_array))
         setMaxGw(Math.max(...gw_array))
-        setTableLength(length_of_table)
         setGwArray(gw_array)
       })
       .catch((err) => {

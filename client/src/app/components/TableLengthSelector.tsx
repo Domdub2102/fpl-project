@@ -1,9 +1,7 @@
-import { useState } from "react";
-
 interface TableLengthSelectorProps {
   minGw: number; 
   maxGw: number;
-  gwArray: any[];
+  gwArray: number[];
   setMinGw: (value: number) => void; // Function to update parent state
   setMaxGw: (value: number) => void; // Function to update parent state
 }

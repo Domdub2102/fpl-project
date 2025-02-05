@@ -1,8 +1,0 @@
-Updates:
-
-1. Choose to calculate opponent xG and xGA from most recent fixtures:
-    - Allows to see which teams are 'in form' 
-
-2. Formatting
-
-
