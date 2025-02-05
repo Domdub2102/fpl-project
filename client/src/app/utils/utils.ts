@@ -6,16 +6,16 @@ type Fixture = {
     xG: number;
     xGA: number;
   };
+
+  type Fixtures = Record<string, Fixture[]>; 
   
   interface UpdatedFixtures {
     [team: string]: {
-      fixtures: Fixture;
-      total_opponent_xG: number;
-      total_opponent_xGA: number;
+      fixtures: Fixture[];
+      total_opponent_xG: string;
+      total_opponent_xGA: string;
     }
   }
-
-type Fixtures = Record<string, Fixture[]>; 
 
 
 export function calculateUpdatedFixtures(
@@ -46,6 +46,6 @@ export function calculateUpdatedFixtures(
       ];
     })
   );
-
+  
   return updatedFixtures;
 }

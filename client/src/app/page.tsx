@@ -17,6 +17,14 @@ type Fixture = {
 
 type Fixtures = Record<string, Fixture[]>; 
 
+interface UpdatedFixtures {
+  [team: string]: {
+    fixtures: Fixture[];
+    total_opponent_xG: string;
+    total_opponent_xGA: string;
+  }
+}
+
 const HomePage = () => {
   const [fixtures, setFixtures] = useState<Fixtures>({}); // State to store the fixtures data
   const [loading, setLoading] = useState(true); // State for the loading status
@@ -38,7 +46,7 @@ const HomePage = () => {
       .then((data) => {
         setFixtures(data); // Assuming `data` contains the fixtures
         setLoading(false);
-        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [, teamFixtures]) => {
+        const { length_of_table, gw_array } = Object.entries(data as Fixtures).reduce((acc, [, teamFixtures]) => {
           const gwCount = teamFixtures.length; // Get number of fixtures for this team
           
           // If this team has more fixtures than the previous max, update acc
@@ -47,7 +55,8 @@ const HomePage = () => {
             acc.gw_array = teamFixtures.map((fixture: Fixture) => fixture.gameweek); // Extract the gameweek numbers
           }
           return acc;
-        }, { length_of_table: 0, gw_array: [] }); // Initialize the accumulator with default values
+        }, { length_of_table: 0, gw_array: [] as number[] }); // Initialize the accumulator with default values
+
         setMinGw(Math.min(...gw_array))
         setMaxGw(Math.max(...gw_array))
         setGwArray(gw_array)
@@ -71,7 +80,6 @@ const HomePage = () => {
   const updatedFixtures = calculateUpdatedFixtures(fixtures, minGw, maxGw)
 
   console.log(updatedFixtures)
-
   console.log(minGw, maxGw)
 
   // JSX for displaying the fixtures
