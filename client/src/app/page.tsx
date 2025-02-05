@@ -17,13 +17,6 @@ type Fixture = {
 
 type Fixtures = Record<string, Fixture[]>; 
 
-interface UpdatedFixtures {
-  [team: string]: {
-    fixtures: Fixture[];
-    total_opponent_xG: string;
-    total_opponent_xGA: string;
-  }
-}
 
 const HomePage = () => {
   const [fixtures, setFixtures] = useState<Fixtures>({}); // State to store the fixtures data
