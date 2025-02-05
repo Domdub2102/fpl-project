@@ -38,7 +38,7 @@ const HomePage = () => {
       .then((data) => {
         setFixtures(data); // Assuming `data` contains the fixtures
         setLoading(false);
-        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [_, teamFixtures]) => {
+        const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [, teamFixtures]) => {
           const gwCount = teamFixtures.length; // Get number of fixtures for this team
           
           // If this team has more fixtures than the previous max, update acc
