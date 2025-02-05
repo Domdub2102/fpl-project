@@ -15,14 +15,6 @@ type Fixture = {
   xGA: number;
 };
 
-interface UpdatedFixtures {
-  [team: string]: {
-    fixtures: Fixture;
-    total_opponent_xG_next_n_gws: number;
-    total_opponent_xGA_next_n_gws: number;
-  }
-}
-
 type Fixtures = Record<string, Fixture[]>; 
 
 const HomePage = () => {
@@ -46,8 +38,6 @@ const HomePage = () => {
       .then((data) => {
         setFixtures(data); // Assuming `data` contains the fixtures
         setLoading(false);
-        // use fixtures object to determine maximum table length 
-        // also creates an array of upcoming gw numbers to refer to when creating the table columns
         const { length_of_table, gw_array } = Object.entries(data).reduce((acc, [_, teamFixtures]) => {
           const gwCount = teamFixtures.length; // Get number of fixtures for this team
           
@@ -61,6 +51,7 @@ const HomePage = () => {
         setMinGw(Math.min(...gw_array))
         setMaxGw(Math.max(...gw_array))
         setGwArray(gw_array)
+        console.log(length_of_table)
       })
       .catch((err) => {
         setError(err.message);
@@ -82,12 +73,6 @@ const HomePage = () => {
   console.log(updatedFixtures)
 
   console.log(minGw, maxGw)
-
-  // Need to send the isAttack state to the FixturesTable so it can sort by xG or xGA 
-  // depending which state its in
-
-  // Need to first update Fixtures Table so it takes updatedFxitures as a prop, 
-  // rather than just fixtures
 
   // JSX for displaying the fixtures
   return (

@@ -9,8 +9,10 @@ type Fixture = {
   xGA: number;
 };
 
+type Fixtures = Record<string, Fixture[]>; 
+
 interface UpdatedFixtures {
-  fixtures: Fixture[]
+  fixtures: Fixtures
   total_opponent_xG: string
   total_opponent_xGA: string
 }
