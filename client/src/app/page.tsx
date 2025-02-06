@@ -29,7 +29,7 @@ const HomePage = () => {
   
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/fixtures') // Update the endpoint if needed
+    fetch('https://fpl-project-f8gz.onrender.com/api/fixtures') // Update the endpoint if needed
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
