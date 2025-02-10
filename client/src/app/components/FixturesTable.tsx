@@ -7,6 +7,8 @@ type Fixture = {
   opponent_short: string;
   xG: number;
   xGA: number;
+  xGrank: number;
+  xGArank: number;
 };
 
 interface UpdatedFixtures {
@@ -48,90 +50,111 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
 
     return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
   });
-  console.log(sortedTeams)
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full table-fixed border-separate border border-gray-300 border-spacing-4">
-        {/* Table Headers */}
-        <thead>
-          <tr>
-            <th className="bg-green-800 border border-gray-300 rounded-md px-4 py-2 w-[150px] text-center">Team</th>
-            {/* Generate columns for each gameweek in gw_array up to a certain number (including duplicates) */}
-            {gw_array
-              .filter((gw) => gw <= maxGw && gw >= minGw) // Only include gameweeks between the max and min
-              .map((gw, index) => (
-                <th key={index} className="border rounded-md border-gray-300 px-4 py-2 w-[120px] text-center">
-                  GW {gw}
+    <div className="relative">
+      <div className="overflow-x-auto max-w-[1300px]" id="scrollable-table">
+        <table className="w-full table-fixed border-separate border-spacing-4">
+          {/* Table Headers */}
+          <thead>
+            <tr>
+              <th className="w-[160px] h-[50px] bg-black sticky left-0 text-center"></th>
+              {/* Generate columns for each gameweek in gw_array up to a certain number (including duplicates) */}
+              {gw_array
+                .filter((gw) => gw <= maxGw && gw >= minGw) // Only include gameweeks between the max and min
+                .map((gw, index) => (
+                  <th key={index} className=" px-4 py-2 w-[120px] h-[30px] text-center">
+                    GW {gw}
+                  </th>
+                ))
+              }
+              
+              {/* Total xG & xGA Columns */}
+              {isAttack ? (
+                <th
+                  className="px-4 py-2 w-[160px] h-[50x] text-center text-white cursor-pointer sticky right-0 bg-black"
+                  onClick={() => handleSort("xGA")}
+                >
+                  Opponent xGA Total {sortBy === "xGA" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
-              ))
-            }
-            
-            {/* Total xG & xGA Columns */}
-            {isAttack ? (
-              <th
-                className="border rounded-md border-gray-300 px-4 py-2 w-[160px] text-center cursor-pointer"
-                onClick={() => handleSort("xGA")}
-              >
-                Opponent xGA {sortBy === "xGA" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-            ) : (
-              <th
-                className="border rounded-md border-gray-300 px-4 py-2 w-[160px] text-center cursor-pointer"
-                onClick={() => handleSort("xG")}
-              >
-                Opponent xG {sortBy === "xG" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-            )}
-            
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTeams.map(([team, { fixtures, total_opponent_xG, total_opponent_xGA }]) => {
-            const teamFixturesClone = [...fixtures]; // Clone to manage double gameweeks
+              ) : (
+                <th
+                  className="px-4 py-2 w-[160px] h-[50px] text-center text-white cursor-pointer sticky right-0 bg-black"
+                  onClick={() => handleSort("xG")}
+                >
+                  Opponent xG Total {sortBy === "xG" && (sortOrder === "asc" ? "↑" : "↓")}
+                </th>
+              )}
+              
+            </tr>
+          </thead>
+          <tbody>
+            {sortedTeams.map(([team, { fixtures, total_opponent_xG, total_opponent_xGA }]) => {
+              const teamFixturesClone = [...fixtures]; // Clone to manage double gameweeks
 
-            return (
-              <tr key={team}>
-                {/* Team Name */}
-                <td className="border rounded-md border-gray-300 px-4 py-2 font-bold">{team}</td>
+              return (
+                <tr key={team}>
+                  {/* Team Name */}
+                  <td className="w-[160px] h-[80px] text-lg font-bold sticky left-0 text-white bg-black">{team}</td>
 
-                {/* Gameweek Fixtures */}
-                {gw_array
-                  .filter((gw) => gw <= maxGw && gw >= minGw)
-                  .map((gw, index) => {
-                    // Get all fixtures for the current gameweek
-                    const fixturesForGW = teamFixturesClone.filter((fixture) => fixture.gameweek === gw);
+                  {/* Gameweek Fixtures */}
+                  {gw_array
+                    .filter((gw) => gw <= maxGw && gw >= minGw)
+                    .map((gw, index) => {
+                      // Get all fixtures for the current gameweek
+                      const fixturesForGW = teamFixturesClone.filter((fixture) => fixture.gameweek === gw);
 
-                    // If the next gw_array value is the same, shift the clone to show second fixture later
-                    if (gw_array[index + 1] === gw) {
-                      teamFixturesClone.shift();
-                    }
+                      // If the next gw_array value is the same, shift the clone to show second fixture later
+                      if (gw_array[index + 1] === gw) {
+                        teamFixturesClone.shift();
+                      }
+                      
+                      // Function to determine background color based on rank
+                      const getBgColor = (rank: number) => {
+                        if (rank >= 1 && rank <= 4) return "bg-red-700 text-white"; // Dark Red
+                        if (rank >= 5 && rank <= 8) return "bg-red-400 text-black"; // Light Red
+                        if (rank >= 9 && rank <= 12) return "bg-gray-300 text-black"; // Grey
+                        if (rank >= 13 && rank <= 16) return "bg-green-300 text-black"; // Light Green
+                        if (rank >= 17 && rank <= 20) return "bg-green-700 text-white"; // Dark Green
+                        else return "";
+                      };
 
-                    return (
-                      <td key={index} className="border rounded-md px-4 py-2 text-center">
-                        {fixturesForGW.length > 0 ? (
-                          <>
-                            <div>{fixturesForGW[0].opponent_short} ({fixturesForGW[0].home_away})</div>
-                            <div className="text-sm text-gray-500">xG: {fixturesForGW[0].xG}</div>
-                            <div className="text-sm text-gray-500">xGA: {fixturesForGW[0].xGA}</div>
-                          </>
-                        ) : (
-                          <div className="text-gray-400">-</div> // Empty cell for no fixture
-                        )}
-                      </td>
-                    );
-                  })}
-                {/* Total xG & xGA Columns */}
-                {!isAttack ? (
-                  <td className="border rounded-md px-4 py-2 text-center font-bold">{total_opponent_xG}</td>
-                ) : (
-                  <td className="border rounded-md px-4 py-2 text-center font-bold">{total_opponent_xGA}</td>
-                )}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                      return (
+                        <td
+                          key={index}
+                          className={`border-none rounded-md px-4 py-2 text-center ${
+                            fixturesForGW.length > 0 ?
+                              getBgColor(isAttack ? fixturesForGW[0].xGArank : fixturesForGW[0].xGrank) :
+                              ""
+                          }`}
+                        >
+                          {fixturesForGW.length > 0 ? (
+                            <>
+                              <div className="text-lg font-bold">{fixturesForGW[0].opponent_short} ({fixturesForGW[0].home_away})</div>
+                              {isAttack ?
+                                <div className="text-xs text-black">xGA: {fixturesForGW[0].xGA}</div> :
+                                <div className="text-xs text-black">xG: {fixturesForGW[0].xG}</div>
+                              }
+                            </>
+                          ) : (
+                            <div className="text-white">-</div> // Empty cell for no fixture
+                          )}
+                        </td>
+                      );
+                    })
+                  }
+                  {/* Total xG & xGA Columns */}
+                  {!isAttack ? (
+                    <td className="w-[160px] px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xG}</td>
+                  ) : (
+                    <td className="w-[160px] px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xGA}</td>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

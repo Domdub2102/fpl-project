@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ToggleButton from './components/ToggleButton';
 import TableLengthSelector from './components/TableLengthSelector';
 import FixturesTable from './components/FixturesTable';
-import { calculateUpdatedFixtures } from './utils/utils';
+import { calculateUpdatedFixtures, calculateMeanValues } from './utils/utils';
 
 type Fixture = {
   gameweek: number;
@@ -13,6 +13,8 @@ type Fixture = {
   opponent_short: string;
   xG: number;
   xGA: number;
+  xGrank: number;
+  xGArank: number;
 };
 
 type Fixtures = Record<string, Fixture[]>; 
@@ -69,30 +71,41 @@ const HomePage = () => {
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
+  console.log(fixtures)
+
 
   const updatedFixtures = calculateUpdatedFixtures(fixtures, minGw, maxGw)
 
-  console.log(updatedFixtures)
-  console.log(minGw, maxGw)
+  const meanValues = calculateMeanValues(updatedFixtures)
+
+  console.log(meanValues)
 
   // JSX for displaying the fixtures
   return (
-    <div className="container mx-auto p-4 overflow-auto relative">
-      <div className="flex items-center justify-between max-w-lg mx-auto mb-6">
+    <div className="container flex flex-col mx-auto p-4 overflow-auto relative">
+
+      <div className="flex items-center justify-between max-w-[800px] w-full mx-auto mb-10 pt-10">
+
+        <h1 className="text-2xl font-bold text-center">
+          FPL Fixture Difficulty
+        </h1>
+
         <TableLengthSelector 
-          minGw={minGw} 
+          minGw={minGw}
           maxGw={maxGw} 
           gwArray={gwArray} 
           setMinGw={setMinGw} 
           setMaxGw={setMaxGw}
         />
-        <h1 className="text-2xl font-bold">FPL Fixture Difficulty</h1>
+        
         <ToggleButton 
           isAttack={isAttack} 
           setIsAttack={setIsAttack}
         />
       </div>
-      <div className="overflow-x-auto">
+  
+      {/* Scrollable Table */}
+      <div>
         <FixturesTable 
           updatedFixtures={updatedFixtures} 
           gw_array={gwArray} 
@@ -103,6 +116,7 @@ const HomePage = () => {
       </div>
     </div>
   );
+  
 };
 
 export default HomePage;

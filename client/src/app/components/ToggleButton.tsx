@@ -12,12 +12,12 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({isAttack, setIsAttack}) => {
           {/* Toggle Button */}
           <button
             onClick={() => setIsAttack(!isAttack)}
-            className={`relative w-14 h-8 bg-gray-300 rounded-full transition duration-300 ${
+            className={`relative w-14 h-8 rounded-full transition duration-150 ${
               isAttack ? "bg-green-500" : "bg-blue-500"
             }`}
           >
             <div
-              className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300 ${
+              className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-150 ${
                 isAttack ? "translate-x-0" : "translate-x-6"
               }`}
             />

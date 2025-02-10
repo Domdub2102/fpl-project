@@ -1,0 +1,9 @@
+
+
+To add:
+
+1. Key of fixture difficulty (copy from fpl site)
+
+2. Explanation box (use accordion or other from thing gareth sent)
+
+3. other minor alignment stuff

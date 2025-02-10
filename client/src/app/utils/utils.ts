@@ -1,11 +1,13 @@
 type Fixture = {
-    gameweek: number;
-    home_away: string;
-    opponent: string;
-    opponent_short: string;
-    xG: number;
-    xGA: number;
-  };
+  gameweek: number;
+  home_away: string;
+  opponent: string;
+  opponent_short: string;
+  xG: number;
+  xGA: number;
+  xGrank: number;
+  xGArank: number;
+};
 
   type Fixtures = Record<string, Fixture[]>; 
   
@@ -49,3 +51,24 @@ export function calculateUpdatedFixtures(
   
   return updatedFixtures;
 }
+
+export const calculateMeanValues = (updatedFixtures: UpdatedFixtures) => {
+  const teams = Object.keys(updatedFixtures);
+  const totalTeams = teams.length;
+
+  if (totalTeams === 0) return { meanXG: 0, meanXGA: 0 }; // Avoid division by zero
+
+  const { sumXG, sumXGA } = teams.reduce(
+    (acc, team) => {
+      acc.sumXG += parseFloat(updatedFixtures[team].total_opponent_xG);
+      acc.sumXGA += parseFloat(updatedFixtures[team].total_opponent_xGA);
+      return acc;
+    },
+    { sumXG: 0, sumXGA: 0 }
+  );
+
+  return {
+    meanXG: (sumXG / totalTeams).toFixed(2), // Format to 2 decimal places
+    meanXGA: (sumXGA / totalTeams).toFixed(2),
+  };
+};
