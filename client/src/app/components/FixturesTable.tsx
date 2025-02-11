@@ -63,7 +63,7 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
               {gw_array
                 .filter((gw) => gw <= maxGw && gw >= minGw) // Only include gameweeks between the max and min
                 .map((gw, index) => (
-                  <th key={index} className="min-w-[110px] px-4 py-2 text-center">
+                  <th key={index} className="min-w-[110px] px-4 py-2 text-center text-white">
                     GW {gw}
                   </th>
                 ))

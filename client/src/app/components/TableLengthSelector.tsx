@@ -39,16 +39,16 @@ const TableLengthSelector: React.FC<TableLengthSelectorProps> = ({
 
   return (
     <div className="flex items-center space-x-2 mr-8">
-      <label className="text-sm font-medium text-white-700">From GW:</label>
+      <label className="text-sm font-medium text-white">From GW:</label>
       <input
         type="number"
         value={minGw}
         onChange={handleMinChange}
         min={gwArray[0]}
         max={maxGw}
-        className="w-16 px-0 py-1 border rounded text-center text-black"
+        className="w-16 px-0 py-1 border rounded text-center text-black mr-5"
       />
-      <label className="text-sm font-medium text-white-700">To GW:</label>
+      <label className="text-sm font-medium text-white">To GW:</label>
       <input
         type="number"
         value={maxGw}

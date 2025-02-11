@@ -5,6 +5,11 @@ import ToggleButton from './components/ToggleButton';
 import TableLengthSelector from './components/TableLengthSelector';
 import FixturesTable from './components/FixturesTable';
 import { calculateUpdatedFixtures, calculateMeanValues } from './utils/utils';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./components/popover"
 
 type Fixture = {
   gameweek: number;
@@ -53,7 +58,7 @@ const HomePage = () => {
         }, { length_of_table: 0, gw_array: [] as number[] }); // Initialize the accumulator with default values
 
         setMinGw(Math.min(...gw_array))
-        setMaxGw(Math.max(...gw_array))
+        setMaxGw(Math.min(...gw_array) + 6)
         setGwArray(gw_array)
         console.log(length_of_table)
       })
@@ -84,9 +89,9 @@ const HomePage = () => {
   return (
     <div className="">
 
-      <div className="flex items-center justify-between px-20 py-5 mb-10 border-b border-gray-500 ">
+      <div className="flex items-center justify-between px-20 py-5 border-b border-gray-500 ">
 
-        <h1 className="text-2xl font-bold text-center">
+        <h1 className="text-2xl font-bold text-center text-white">
           FPL Fixture Difficulty
         </h1>
 
@@ -97,13 +102,27 @@ const HomePage = () => {
           setMinGw={setMinGw} 
           setMaxGw={setMaxGw}
         />
-        
+
         <ToggleButton 
           isAttack={isAttack} 
           setIsAttack={setIsAttack}
         />
       </div>
-  
+
+      <div className='flex justify-start my-5 mx-10'>
+        <Popover>
+          <PopoverTrigger className='border border-gray-500 rounded-sm p-2 hover:bg-white hover:text-black hover:border-white'>
+            <h3>Click Here for Explanation and Instructions</h3>
+          </PopoverTrigger>
+          <PopoverContent>
+            <h3 className='mb-2'>This tool allows FPL users to view Upcoming Fixture Difficulty using expected goals data (xG).</h3>
+            <p className='mb-2'>Use the Gameweek selector to adjust which fixtures are shown.</p>
+            <p className='mb-2'>Toggle between viewing fixtures from the perspective of Attackers (Opponents' xGA) or Defenders (Opponents' xG). </p>
+            <p>Sort Fixtures by difficulty by clicking on the Opponent Total column. Remember that higher xGA is good for attackers, but lower xG is good for defenders.</p>
+          </PopoverContent>
+        </Popover>
+      </div>
+
       {/* Scrollable Table */}
       <div>
         <FixturesTable 
