@@ -82,9 +82,9 @@ const HomePage = () => {
 
   // JSX for displaying the fixtures
   return (
-    <div className="container flex flex-col mx-auto p-4 overflow-auto relative">
+    <div className="">
 
-      <div className="flex items-center justify-between max-w-[800px] w-full mx-auto mb-10 pt-10">
+      <div className="flex items-center justify-between px-20 py-5 mb-10 border-b border-gray-500 ">
 
         <h1 className="text-2xl font-bold text-center">
           FPL Fixture Difficulty

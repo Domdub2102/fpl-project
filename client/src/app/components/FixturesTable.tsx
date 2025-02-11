@@ -52,18 +52,18 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
   });
 
   return (
-    <div className="relative">
-      <div className="overflow-x-auto max-w-[1300px]" id="scrollable-table">
-        <table className="w-full table-fixed border-separate border-spacing-4">
+    <div className="border border-gray-500 rounded-md mx-10">
+      <div className="overflow-x-auto w-full">
+        <table className="w-full table-auto border-separate border-spacing-4">
           {/* Table Headers */}
           <thead>
             <tr>
-              <th className="w-[160px] h-[50px] bg-black sticky left-0 text-center"></th>
+              <th className="min-w-[180px] bg-black sticky left-0 text-center"></th>
               {/* Generate columns for each gameweek in gw_array up to a certain number (including duplicates) */}
               {gw_array
                 .filter((gw) => gw <= maxGw && gw >= minGw) // Only include gameweeks between the max and min
                 .map((gw, index) => (
-                  <th key={index} className=" px-4 py-2 w-[120px] h-[30px] text-center">
+                  <th key={index} className="min-w-[110px] px-4 py-2 text-center">
                     GW {gw}
                   </th>
                 ))
@@ -72,14 +72,14 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
               {/* Total xG & xGA Columns */}
               {isAttack ? (
                 <th
-                  className="px-4 py-2 w-[160px] h-[50x] text-center text-white cursor-pointer sticky right-0 bg-black"
+                  className="min-w-[210px] px-4 py-2 text-center text-white cursor-pointer sticky right-0 bg-black"
                   onClick={() => handleSort("xGA")}
                 >
                   Opponent xGA Total {sortBy === "xGA" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
               ) : (
                 <th
-                  className="px-4 py-2 w-[160px] h-[50px] text-center text-white cursor-pointer sticky right-0 bg-black"
+                  className="min-w-[210px] px-4 py-2 text-center text-white cursor-pointer sticky right-0 bg-black"
                   onClick={() => handleSort("xG")}
                 >
                   Opponent xG Total {sortBy === "xG" && (sortOrder === "asc" ? "↑" : "↓")}
@@ -95,7 +95,7 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
               return (
                 <tr key={team}>
                   {/* Team Name */}
-                  <td className="w-[160px] h-[80px] text-lg font-bold sticky left-0 text-white bg-black">{team}</td>
+                  <td className="px-5 h-[80px] text-lg font-bold sticky left-0 text-white bg-black">{team}</td>
 
                   {/* Gameweek Fixtures */}
                   {gw_array
@@ -145,9 +145,9 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
                   }
                   {/* Total xG & xGA Columns */}
                   {!isAttack ? (
-                    <td className="w-[160px] px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xG}</td>
+                    <td className="px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xG}</td>
                   ) : (
-                    <td className="w-[160px] px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xGA}</td>
+                    <td className="px-4 py-2 text-center text-white text-lg font-bold sticky right-0 bg-black">{total_opponent_xGA}</td>
                   )}
                 </tr>
               );
