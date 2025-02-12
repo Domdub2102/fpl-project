@@ -115,9 +115,9 @@ const HomePage = () => {
             <h3>Click Here for Explanation and Instructions</h3>
           </PopoverTrigger>
           <PopoverContent>
-            <h3 className='mb-2'>This tool allows FPL users to view Upcoming Fixture Difficulty using expected goals data.</h3>
+            <h3 className='mb-2'>This tool allows FPL users to view Upcoming Fixture Difficulty using expected goals data (xG).</h3>
             <p className='mb-2'>Use the Gameweek selector to adjust which fixtures are shown.</p>
-            <p className='mb-2'>Toggle between viewing fixtures from the perspective of Attackers or Defenders by viewing either Opponents' xGA or xG </p>
+            <p className='mb-2'>Toggle between viewing fixtures from the perspective of Attackers or Defenders by viewing either xGA or xG of upcoming opponents.</p>
             <p>Sort Fixtures by difficulty by clicking on the Opponent Total column. Remember that higher xGA is good for attackers, but lower xG is good for defenders.</p>
           </PopoverContent>
         </Popover>
