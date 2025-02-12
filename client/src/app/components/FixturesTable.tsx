@@ -52,13 +52,13 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
   });
 
   return (
-    <div className="border border-gray-500 rounded-md mx-10">
+    <div className="border border-gray-500 rounded-md mx-10 mb-10">
       <div className="overflow-x-auto w-full">
-        <table className="w-full table-auto border-separate border-spacing-4">
+        <table className="w-full table-auto border-separate border-spacing-3">
           {/* Table Headers */}
           <thead>
             <tr>
-              <th className="min-w-[180px] bg-black sticky left-0 text-center"></th>
+              <th className="min-w-[180px] bg-black sticky left-0 text-gray-400 text-left text-lg px-5">Team</th>
               {/* Generate columns for each gameweek in gw_array up to a certain number (including duplicates) */}
               {gw_array
                 .filter((gw) => gw <= maxGw && gw >= minGw) // Only include gameweeks between the max and min
@@ -72,14 +72,14 @@ const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array
               {/* Total xG & xGA Columns */}
               {isAttack ? (
                 <th
-                  className="min-w-[210px] px-4 py-2 text-center text-white cursor-pointer sticky right-0 bg-black"
+                  className="min-w-[210px] px-4 py-2 text-center cursor-pointer sticky right-0 bg-black border border-gray-500 rounded-sm hover:bg-white hover:text-black hover:border-white"
                   onClick={() => handleSort("xGA")}
                 >
                   Opponent xGA Total {sortBy === "xGA" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
               ) : (
                 <th
-                  className="min-w-[210px] px-4 py-2 text-center text-white cursor-pointer sticky right-0 bg-black"
+                  className="min-w-[210px] px-4 py-2 text-center cursor-pointer sticky right-0 bg-black border border-gray-500 rounded-sm hover:bg-white hover:text-black hover:border-white"
                   onClick={() => handleSort("xG")}
                 >
                   Opponent xG Total {sortBy === "xG" && (sortOrder === "asc" ? "↑" : "↓")}
