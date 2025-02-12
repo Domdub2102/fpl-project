@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ToggleButton from './components/ToggleButton';
 import TableLengthSelector from './components/TableLengthSelector';
 import FixturesTable from './components/FixturesTable';
-import { calculateUpdatedFixtures, calculateMeanValues } from './utils/utils';
+import { calculateUpdatedFixtures } from './utils/utils';
 import {
   Popover,
   PopoverContent,
