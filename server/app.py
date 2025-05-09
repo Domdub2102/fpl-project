@@ -5,7 +5,7 @@ from myapp.utils import fetch_league_data, fetch_league_fixtures, match_xg_data
 
 # app instance
 app = Quart(__name__)
-app = cors(app, allow_origin="https://fpl-project-ruby.vercel.app/")
+app = cors(app, allow_origin="https://fpl-project-ruby.vercel.app")
 
 @app.route("/api/fixtures", methods=['GET'])
 async def get_upcoming_fixtures():
