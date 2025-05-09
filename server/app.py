@@ -1,11 +1,11 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from quart import Quart, jsonify
+from quart_cors import cors
 from myapp.utils import fetch_league_data, fetch_league_fixtures, match_xg_data
 
 
 # app instance
-app = Flask(__name__)
-CORS(app)
+app = Quart(__name__)
+app = cors(app)
 
 @app.route("/api/fixtures", methods=['GET'])
 async def get_upcoming_fixtures():
