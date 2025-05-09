@@ -29,6 +29,8 @@ interface FixturesTableProps {
 
 
 const FixturesTable: React.FC<FixturesTableProps> = ({ updatedFixtures, gw_array, maxGw, minGw, isAttack }) => {
+
+  console.log(updatedFixtures[0])
   
   const [sortBy, setSortBy] = useState<"xG" | "xGA">("xG"); // Default sorting by xG
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // Default descending

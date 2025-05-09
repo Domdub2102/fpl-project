@@ -34,6 +34,7 @@ const HomePage = () => {
   const [minGw, setMinGw] = useState(0)
   const [maxGw, setMaxGw] = useState(0)
   
+  console.log(fixtures)
 
   useEffect(() => {
     fetch('https://fpl-project-f8gz.onrender.com/api/fixtures') // Update the endpoint if needed
@@ -44,7 +45,7 @@ const HomePage = () => {
         return response.json();
       })
       .then((data) => {
-        setFixtures(data); // Assuming `data` contains the fixtures
+        setFixtures(data); // data contains fixtures from Flask API
         setLoading(false);
         const { length_of_table, gw_array } = Object.entries(data as Fixtures).reduce((acc, [, teamFixtures]) => {
           const gwCount = teamFixtures.length; // Get number of fixtures for this team
@@ -58,7 +59,7 @@ const HomePage = () => {
         }, { length_of_table: 0, gw_array: [] as number[] }); // Initialize the accumulator with default values
 
         setMinGw(Math.min(...gw_array))
-        setMaxGw(Math.min(...gw_array) + 6)
+        setMaxGw(38)
         setGwArray(gw_array)
         console.log(length_of_table)
       })
