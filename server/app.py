@@ -1,11 +1,9 @@
 from quart import Quart, jsonify
-from quart_cors import cors
 from myapp.utils import fetch_league_data, fetch_league_fixtures, match_xg_data
 
 
 # app instance
 app = Quart(__name__)
-app = cors(app, allow_origin="*")
 
 @app.route("/api/fixtures", methods=['GET'])
 async def get_upcoming_fixtures():
